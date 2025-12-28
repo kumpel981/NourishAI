@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | NourishAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .premium-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .premium-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .premium-input {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 18px 24px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .premium-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Admin Specific */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th {
+            text-align: left;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .admin-table td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .admin-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--secondary);
+        }
+
+        .status-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent);
+        }
+
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .edit-btn {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .edit-btn:hover {
+            background: rgba(59, 130, 246, 0.3);
+        }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .delete-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 32px;
+            width: 90%;
+            max-width: 500px;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #374151;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="glass fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-emerald-500 flex items-center justify-center">
+                            <i class="fas fa-cogs text-white text-xl"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">
+                            <span class="gradient-text">Admin</span>
+                            <span class="text-white">Dashboard</span>
+                        </h1>
+                        <p class="text-sm text-gray-400">NourishAI Control Panel</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors font-medium flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i> Back to App
+                    </a>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span class="text-sm">System Online</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Admin Content -->
+    <main class="pt-24 pb-12 px-4 max-w-7xl mx-auto">
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card">
+                <div class="stat-number">2,847</div>
+                <div class="text-gray-400">Active Students</div>
+                <div class="text-xs text-green-400 mt-2">↑ 12% this week</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">42</div>
+                <div class="text-gray-400">Universities</div>
+                <div class="text-xs text-blue-400 mt-2">All Kenya covered</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">48,921</div>
+                <div class="text-gray-400">AI Recommendations</div>
+                <div class="text-xs text-purple-400 mt-2">1,247 today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">Ksh 84,250</div>
+                <div class="text-gray-400">Monthly Revenue</div>
+                <div class="text-xs text-amber-400 mt-2">↑ 18% growth</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left: University Management -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- University Management -->
+                <div class="premium-card">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="text-2xl font-bold flex items-center gap-3">
+                            <i class="fas fa-university text-blue-400"></i>
+                            University Management
+                        </h2>
+                        <button class="btn-premium" onclick="showAddUniversityModal()">
+                            <i class="fas fa-plus"></i> Add University
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>University</th>
+                                    <th>Students</th>
+                                    <th>Active Users</th>
+                                    <th>Avg Budget</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="universityTable">
+                                <!-- Filled by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Meal Database -->
+                <div class="premium-card">
+                    <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                        <i class="fas fa-utensils text-orange-400"></i>
+                        Meal Database
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6" id="mealGrid">
+                        <!-- Meal cards will be added by JS -->
+                    </div>
+
+                    <button class="btn-premium w-full" onclick="showAddMealModal()">
+                        <i class="fas fa-plus-circle"></i> Add New Meal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: AI Controls & Analytics -->
+            <div class="space-y-8">
+                <!-- AI Controls -->
+                <div class="premium-card">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <i class="fas fa-brain text-purple-400"></i>
+                        AI Controls
+                    </h2>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between p-4 rounded-xl bg-gray-900/50">
+                            <div>
+                                <p class="font-medium">Auto-learning Mode</p>
+                                <p class="text-sm text-gray-400">AI learns from user patterns</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked id="autoLearn">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 rounded-xl bg-gray-900/50">
+                            <div>
+                                <p class="font-medium">Price Prediction AI</p>
+                                <p class="text-sm text-gray-400">Predict market prices</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked id="priceAI">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 rounded-xl bg-gray-900/50">
+                            <div>
+                                <p class="font-medium">Nutritional Analysis</p>
+                                <p class="text-sm text-gray-400">Analyze meal nutrition</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked id="nutritionAI">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="pt-4 border-t border-gray-800">
+                            <label class="block mb-3 font-medium">AI Creativity Level</label>
+                            <input type="range" min="1" max="10" value="7" class="w-full h-2 bg-gray-700 rounded-lg" id="aiCreativity">
+                        </div>
+
+                        <button class="btn-premium w-full" onclick="trainAI()">
+                            <i class="fas fa-play-circle"></i> Train AI Model
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Real-time Analytics -->
+                <div class="premium-card">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <i class="fas fa-chart-line text-green-400"></i>
+                        Real-time Analytics
+                    </h2>
+
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm">Most Active Campus</span>
+                                <span class="text-sm font-bold">UoN (847 users)</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-blue-500 to-purple-500" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm">Most Requested Meal</span>
+                                <span class="text-sm font-bold">Githeri Special</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-green-500 to-emerald-500" style="width: 72%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm">Average Student Budget</span>
+                                <span class="text-sm font-bold">Ksh 240/day</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-amber-500 to-orange-500" style="width: 60%"></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-gray-800">
+                            <h4 class="font-bold mb-3">Trending Keywords</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 rounded-full bg-blue-900/30 text-blue-400 text-sm">budget</span>
+                                <span class="px-3 py-1 rounded-full bg-green-900/30 text-green-400 text-sm">quick</span>
+                                <span class="px-3 py-1 rounded-full bg-purple-900/30 text-purple-400 text-sm">healthy</span>
+                                <span class="px-3 py-1 rounded-full bg-amber-900/30 text-amber-400 text-sm">cheap</span>
+                                <span class="px-3 py-1 rounded-full bg-pink-900/30 text-pink-400 text-sm">easy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="premium-card">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <i class="fas fa-bolt text-yellow-400"></i>
+                        Quick Actions
+                    </h2>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <button class="p-4 rounded-xl bg-gray-900/50 hover:bg-gray-800/50 transition-colors text-center" onclick="exportData()">
+                            <i class="fas fa-download text-2xl mb-2 text-blue-400"></i>
+                            <p class="text-sm font-medium">Export Data</p>
+                        </button>
+                        <button class="p-4 rounded-xl bg-gray-900/50 hover:bg-gray-800/50 transition-colors text-center" onclick="updatePrices()">
+                            <i class="fas fa-sync text-2xl mb-2 text-green-400"></i>
+                            <p class="text-sm font-medium">Update Prices</p>
+                        </button>
+                        <button class="p-4 rounded-xl bg-gray-900/50 hover:bg-gray-800/50 transition-colors text-center" onclick="manageUsers()">
+                            <i class="fas fa-users-cog text-2xl mb-2 text-purple-400"></i>
+                            <p class="text-sm font-medium">Manage Users</p>
+                        </button>
+                        <button class="p-4 rounded-xl bg-gray-900/50 hover:bg-gray-800/50 transition-colors text-center" onclick="systemSettings()">
+                            <i class="fas fa-cogs text-2xl mb-2 text-amber-400"></i>
+                            <p class="text-sm font-medium">Settings</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-12 pt-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-gray-500">© 2024 NourishAI Admin Dashboard</p>
+            <p class="text-sm text-gray-600 mt-2">Contact: 0778796999 • anyumbasidol@gmail.com</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Kenyan Universities Database
+        const universities = [
+            { id: 1, name: 'University of Nairobi', students: 70000, activeUsers: 847, avgBudget: 280, status: 'active' },
+            { id: 2, name: 'Kenyatta University', students: 45000, activeUsers: 621, avgBudget: 250, status: 'active' },
+            { id: 3, name: 'Moi University', students: 35000, activeUsers: 432, avgBudget: 220, status: 'active' },
+            { id: 4, name: 'JKUAT', students: 28000, activeUsers: 389, avgBudget: 240, status: 'active' },
+            { id: 5, name: 'Egerton University', students: 32000, activeUsers: 345, avgBudget: 210, status: 'warning' },
+            { id: 6, name: 'Maseno University', students: 25000, activeUsers: 298, avgBudget: 200, status: 'active' },
+            { id: 7, name: 'Masinde Muliro University', students: 22000, activeUsers: 267, avgBudget: 190, status: 'active' },
+            { id: 8, name: 'Mount Kenya University', students: 35000, activeUsers: 412, avgBudget: 230, status: 'active' },
+            { id: 9, name: 'Strathmore University', students: 6000, activeUsers: 189, avgBudget: 350, status: 'active' },
+            { id: 10, name: 'USIU-Africa', students: 8000, activeUsers: 234, avgBudget: 320, status: 'active' }
+        ];
+
+        // Meal Database
+        const meals = [
+            { id: 1, name: 'Githeri Special', price: 80, category: 'budget', popularity: 2847 },
+            { id: 2, name: 'Smart Rice Bowl', price: 120, category: 'standard', popularity: 1924 },
+            { id: 3, name: 'Campus Pasta', price: 150, category: 'quick', popularity: 1567 },
+            { id: 4, name: 'Protein Power Ugali', price: 110, category: 'healthy', popularity: 1342 },
+            { id: 5, name: 'Chicken Stew Feast', price: 200, category: 'premium', popularity: 987 },
+            { id: 6, name: 'Vegetable Stir-fry', price: 90, category: 'vegan', popularity: 1123 }
+        ];
+
+        // Initialize Admin Dashboard
+        class AdminDashboard {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.loadUniversities();
+                this.loadMeals();
+                this.setupEventListeners();
+                
+                console.log(`
+                ╔══════════════════════════════════════════╗
+                ║     🛠️  NOURISH AI ADMIN v2.0          ║
+                ║     Control Panel Initialized           ║
+                ║     Status: FULL ACCESS                 ║
+                ╚══════════════════════════════════════════╝
+                `);
+            }
+
+            loadUniversities() {
+                const table = document.getElementById('universityTable');
+                table.innerHTML = '';
+
+                universities.forEach(uni => {
+                    const row = document.createElement('tr');
+                    
+                    let statusBadge;
+                    if (uni.status === 'active') {
+                        statusBadge = `<span class="status-badge status-active"><i class="fas fa-circle text-xs"></i> Active</span>`;
+                    } else if (uni.status === 'warning') {
+                        statusBadge = `<span class="status-badge status-warning"><i class="fas fa-exclamation-triangle text-xs"></i> Needs Update</span>`;
+                    } else {
+                        statusBadge = `<span class="status-badge status-inactive"><i class="fas fa-circle text-xs"></i> Inactive</span>`;
+                    }
+
+                    row.innerHTML = `
+                        <td>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                                    <i class="fas fa-university text-white"></i>
+                                </div>
+                                <span>${uni.name}</span>
+                            </div>
+                        </td>
+                        <td>${uni.students.toLocaleString()}</td>
+                        <td>${uni.activeUsers}</td>
+                        <td>Ksh ${uni.avgBudget}/day</td>
+                        <td>${statusBadge}</td>
+                        <td>
+                            <div class="flex gap-2">
+                                <button class="action-btn edit-btn" onclick="editUniversity(${uni.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteUniversity(${uni.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    
+                    table.appendChild(row);
+                });
+            }
+
+            loadMeals() {
+                const container = document.getElementById('mealGrid');
+                container.innerHTML = '';
+
+                meals.forEach(meal => {
+                    const card = document.createElement('div');
+                    card.className = 'premium-card border border-gray-700 hover:border-indigo-500 transition-colors';
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-indigo-900/30 text-indigo-400 mb-2">
+                                    ${meal.category.toUpperCase()}
+                                </span>
+                                <h4 class="font-bold">${meal.name}</h4>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xl font-bold gradient-text">Ksh ${meal.price}</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Used ${meal.popularity.toLocaleString()} times</p>
+                        <div class="flex justify-between">
+                            <button class="action-btn edit-btn" onclick="editMeal(${meal.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteMeal(${meal.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+            }
+
+            setupEventListeners() {
+                // Switch toggles
+                document.getElementById('autoLearn').addEventListener('change', function() {
+                    console.log(`Auto-learning: ${this.checked ? 'Enabled' : 'Disabled'}`);
+                });
+                
+                document.getElementById('priceAI').addEventListener('change', function() {
+                    console.log(`Price Prediction: ${this.checked ? 'Enabled' : 'Disabled'}`);
+                });
+                
+                document.getElementById('nutritionAI').addEventListener('change', function() {
+                    console.log(`Nutrition Analysis: ${this.checked ? 'Enabled' : 'Disabled'}`);
+                });
+
+                // Range slider
+                const slider = document.getElementById('aiCreativity');
+                slider.addEventListener('input', function() {
+                    console.log(`AI Creativity: Level ${this.value}/10`);
+                });
+            }
+        }
+
+        // Modal Functions
+        function showAddUniversityModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h3 class="text-2xl font-bold mb-6">Add New University</h3>
+                    <div class="space-y-4">
+                        <input type="text" placeholder="University Name" class="premium-input" id="uniName">
+                        <input type="number" placeholder="Total Students" class="premium-input" id="uniStudents">
+                        <input type="number" placeholder="Average Daily Budget (Ksh)" class="premium-input" id="uniBudget">
+                        <div class="flex gap-4">
+                            <button class="btn-premium flex-1" onclick="addUniversity()">
+                                Add University
+                            </button>
+                            <button class="premium-input border border-gray-700 flex-1" onclick="closeModal()">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function showAddMealModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h3 class="text-2xl font-bold mb-6">Add New Meal</h3>
+                    <div class="space-y-4">
+                        <input type="text" placeholder="Meal Name" class="premium-input" id="mealName">
+                        <input type="number" placeholder="Price (Ksh)" class="premium-input" id="mealPrice">
+                        <select class="premium-input" id="mealCategory">
+                            <option value="budget">Budget Meal</option>
+                            <option value="standard">Standard Meal</option>
+                            <option value="premium">Premium Meal</option>
+                            <option value="vegan">Vegan Meal</option>
+                            <option value="quick">Quick Meal</option>
+                        </select>
+                        <div class="flex gap-4">
+                            <button class="btn-premium flex-1" onclick="addMeal()">
+                                Add Meal
+                            </button>
+                            <button class="premium-input border border-gray-700 flex-1" onclick="closeModal()">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function closeModal() {
+            const modal = document.querySelector('.modal-overlay');
+            if (modal) modal.remove();
+        }
+
+        // Action Functions
+        function addUniversity() {
+            const name = document.getElementById('uniName').value;
+            if (name) {
+                alert(`University "${name}" added to database!`);
+                closeModal();
+            } else {
+                alert('Please enter a university name!');
+            }
+        }
+
+        function addMeal() {
+            const name = document.getElementById('mealName').value;
+            if (name) {
+                alert(`Meal "${name}" added to database!`);
+                closeModal();
+            } else {
+                alert('Please enter a meal name!');
+            }
+        }
+
+        function editUniversity(id) {
+            const uni = universities.find(u => u.id === id);
+            alert(`Editing: ${uni.name}\n\nIn production, this would open an edit form.`);
+        }
+
+        function deleteUniversity(id) {
+            if (confirm('Are you sure you want to delete this university?')) {
+                alert(`University ${id} deleted from database.`);
+            }
+        }
+
+        function editMeal(id) {
+            const meal = meals.find(m => m.id === id);
+            alert(`Editing: ${meal.name}\n\nIn production, this would open an edit form.`);
+        }
+
+        function deleteMeal(id) {
+            if (confirm('Are you sure you want to delete this meal?')) {
+                alert(`Meal ${id} deleted from database.`);
+            }
+        }
+
+        function trainAI() {
+            const btn = event.target.closest('button');
+            const original = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Training AI...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i> AI Trained!';
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.disabled = false;
+                    alert('AI model successfully trained with latest data!');
+                }, 1500);
+            }, 3000);
+        }
+
+        function exportData() {
+            alert('Exporting all data to CSV... This would download files in production.');
+        }
+
+        function updatePrices() {
+            alert('Updating market prices from live APIs...');
+        }
+
+        function manageUsers() {
+            alert('Opening user management interface...');
+        }
+
+        function systemSettings() {
+            alert('Opening system configuration panel...');
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.adminDashboard = new AdminDashboard();
+        });
+    </script>
+</body>
+</html>
