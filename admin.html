@@ -1,13 +1,17 @@
+[file name]: ADMIN_ENHANCED.HTML
+[file content begin]
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | NourishAI</title>
+    <title>Admin Dashboard | NourishAI Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.css">
     <style>
+        /* Enhanced Professional Styles */
         :root {
             --primary: #6366f1;
             --primary-dark: #4f46e5;
@@ -38,8 +42,15 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         }
 
+        .glass-modal {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
         .premium-card {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
             border: 1px solid rgba(99, 102, 241, 0.2);
             border-radius: 24px;
             padding: 32px;
@@ -48,32 +59,125 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
         .premium-card:hover {
             transform: translateY(-8px);
             border-color: rgba(99, 102, 241, 0.4);
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
         }
 
-        .btn-premium {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            border: none;
-            padding: 16px 32px;
-            border-radius: 16px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
+        /* Enhanced Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
         }
 
-        .btn-premium:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+        .modal-content {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 28px;
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.4);
         }
 
+        /* Notification System */
+        .notification-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 350px;
+        }
+
+        .notification {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            animation: slideInRight 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Enhanced Table */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th {
+            text-align: left;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.1));
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            color: var(--gray);
+            position: sticky;
+            top: 0;
+        }
+
+        .admin-table td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .admin-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Advanced Charts */
+        .chart-container {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 24px;
+            position: relative;
+        }
+
+        /* AI Training Progress */
+        .training-progress {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .training-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Enhanced Inputs */
         .premium-input {
             background: rgba(30, 41, 59, 0.8);
             border: 2px solid rgba(255, 255, 255, 0.1);
@@ -89,197 +193,152 @@
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            background: rgba(30, 41, 59, 1);
         }
 
-        .gradient-text {
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Admin Specific */
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .admin-table th {
-            text-align: left;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        /* Enhanced Buttons */
+        .btn-premium {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 16px;
             font-weight: 600;
-            color: var(--gray);
-        }
-
-        .admin-table td {
-            padding: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .admin-table tr:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .status-active {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--secondary);
-        }
-
-        .status-warning {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--accent);
-        }
-
-        .status-inactive {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-        }
-
-        .action-btn {
-            padding: 8px 16px;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .edit-btn {
-            background: rgba(59, 130, 246, 0.2);
-            color: #3b82f6;
-        }
-
-        .edit-btn:hover {
-            background: rgba(59, 130, 246, 0.3);
-        }
-
-        .delete-btn {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-        }
-
-        .delete-btn:hover {
-            background: rgba(239, 68, 68, 0.3);
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            border-radius: 20px;
-            padding: 24px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .modal-overlay {
-            position: fixed;
+        .btn-premium::before {
+            content: '';
+            position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            animation: fadeIn 0.3s ease;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
 
+        .btn-premium:hover::before {
+            left: 100%;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
 
-        .modal-content {
-            background: var(--dark);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 32px;
-            width: 90%;
-            max-width: 500px;
-            animation: slideUp 0.3s ease;
-        }
-
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
-        
-        .switch {
-            position: relative;
-            display: inline-block;
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
             width: 60px;
-            height: 34px;
-        }
-        
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .slider {
-            position: absolute;
+            height: 30px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 15px;
+            position: relative;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #374151;
-            transition: .4s;
-            border-radius: 34px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .slider:before {
+
+        .theme-toggle::before {
+            content: '';
             position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
+            width: 24px;
+            height: 24px;
+            background: white;
             border-radius: 50%;
+            top: 1px;
+            left: 3px;
+            transition: transform 0.3s;
         }
-        
-        input:checked + .slider {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+
+        .theme-toggle.active::before {
+            transform: translateX(30px);
         }
-        
-        input:checked + .slider:before {
-            transform: translateX(26px);
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        /* Data Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .data-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s;
+        }
+
+        .data-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
 <body>
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
     <!-- Navigation -->
     <nav class="glass fixed w-full z-50">
         <div class="max-w-7xl mx-auto px-6 py-4">
@@ -287,28 +346,40 @@
                 <!-- Logo -->
                 <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-emerald-500 flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-emerald-500 flex items-center justify-center animate-pulse">
                             <i class="fas fa-cogs text-white text-xl"></i>
                         </div>
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold">
-                            <span class="gradient-text">Admin</span>
-                            <span class="text-white">Dashboard</span>
+                            <span class="gradient-text">NourishAI</span>
+                            <span class="text-white"> Admin Pro</span>
                         </h1>
-                        <p class="text-sm text-gray-400">NourishAI Control Panel</p>
+                        <p class="text-sm text-gray-400">Enterprise Control Panel v3.0</p>
                     </div>
                 </div>
 
-                <!-- Navigation Links -->
+                <!-- Right Side Controls -->
                 <div class="flex items-center space-x-6">
-                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors font-medium flex items-center gap-2">
+                    <!-- Search -->
+                    <div class="search-container hidden lg:block">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" placeholder="Search analytics..." class="search-input">
+                    </div>
+
+                    <!-- Theme Toggle -->
+                    <div class="theme-toggle" id="themeToggle"></div>
+
+                    <!-- Notification Bell -->
+                    <button class="relative" id="notificationBell">
+                        <i class="fas fa-bell text-gray-400 hover:text-white text-xl transition-colors"></i>
+                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs flex items-center justify-center">3</span>
+                    </button>
+
+                    <!-- Back Button -->
+                    <a href="index.html" class="btn-premium text-sm">
                         <i class="fas fa-arrow-left"></i> Back to App
                     </a>
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span class="text-sm">System Online</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -316,53 +387,105 @@
 
     <!-- Main Admin Content -->
     <main class="pt-24 pb-12 px-4 max-w-7xl mx-auto">
-        <!-- Stats Overview -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="stat-card">
-                <div class="stat-number">2,847</div>
-                <div class="text-gray-400">Active Students</div>
-                <div class="text-xs text-green-400 mt-2">↑ 12% this week</div>
+        <!-- AI Analytics Dashboard -->
+        <div class="premium-card mb-8">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold">🤖 AI Analytics Dashboard</h2>
+                    <p class="text-gray-400">Real-time insights and performance metrics</p>
+                </div>
+                <div class="flex gap-3">
+                    <button class="btn-premium" onclick="exportAnalytics()">
+                        <i class="fas fa-download"></i> Export Report
+                    </button>
+                    <button class="premium-input border border-gray-700" onclick="refreshAnalytics()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number">42</div>
-                <div class="text-gray-400">Universities</div>
-                <div class="text-xs text-blue-400 mt-2">All Kenya covered</div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="chart-container">
+                    <h3 class="text-lg font-bold mb-4">User Growth</h3>
+                    <div id="growthChart" style="height: 300px;"></div>
+                </div>
+                <div class="chart-container">
+                    <h3 class="text-lg font-bold mb-4">Revenue Analytics</h3>
+                    <div id="revenueChart" style="height: 300px;"></div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number">48,921</div>
-                <div class="text-gray-400">AI Recommendations</div>
-                <div class="text-xs text-purple-400 mt-2">1,247 today</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">Ksh 84,250</div>
-                <div class="text-gray-400">Monthly Revenue</div>
-                <div class="text-xs text-amber-400 mt-2">↑ 18% growth</div>
+
+            <!-- AI Performance Metrics -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="stat-card">
+                    <div class="text-sm text-gray-400 mb-2">AI Accuracy</div>
+                    <div class="text-3xl font-bold gradient-text">94.7%</div>
+                    <div class="text-xs text-emerald-400 mt-2">↑ 2.3% this week</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-sm text-gray-400 mb-2">Response Time</div>
+                    <div class="text-3xl font-bold gradient-text">0.42s</div>
+                    <div class="text-xs text-emerald-400 mt-2">↓ 0.15s faster</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-sm text-gray-400 mb-2">Model Confidence</div>
+                    <div class="text-3xl font-bold gradient-text">88.2%</div>
+                    <div class="text-xs text-amber-400 mt-2">Needs training</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-sm text-gray-400 mb-2">API Usage</div>
+                    <div class="text-3xl font-bold gradient-text">42.8K</div>
+                    <div class="text-xs text-blue-400 mt-2">Requests today</div>
+                </div>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left: University Management -->
+            <!-- University Management -->
             <div class="lg:col-span-2 space-y-8">
-                <!-- University Management -->
+                <!-- University Management Enhanced -->
                 <div class="premium-card">
                     <div class="flex items-center justify-between mb-8">
-                        <h2 class="text-2xl font-bold flex items-center gap-3">
-                            <i class="fas fa-university text-blue-400"></i>
-                            University Management
-                        </h2>
-                        <button class="btn-premium" onclick="showAddUniversityModal()">
-                            <i class="fas fa-plus"></i> Add University
-                        </button>
+                        <div>
+                            <h2 class="text-2xl font-bold flex items-center gap-3">
+                                <i class="fas fa-university text-blue-400"></i>
+                                University Network
+                            </h2>
+                            <p class="text-gray-400 mt-1">Manage all 40+ Kenyan universities</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="btn-premium" onclick="showAddUniversityModal()">
+                                <i class="fas fa-plus"></i> Add University
+                            </button>
+                            <button class="premium-input border border-gray-700" onclick="syncUniversities()">
+                                <i class="fas fa-sync"></i> Sync
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="overflow-x-auto">
+                    <!-- Search & Filter -->
+                    <div class="flex gap-4 mb-6">
+                        <div class="flex-1">
+                            <input type="text" placeholder="Search universities..." class="premium-input" id="universitySearch">
+                        </div>
+                        <select class="premium-input w-48" id="statusFilter">
+                            <option value="all">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="warning">Needs Update</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                    <!-- Enhanced Table -->
+                    <div class="overflow-x-auto rounded-2xl border border-gray-800">
                         <table class="admin-table">
                             <thead>
                                 <tr>
                                     <th>University</th>
                                     <th>Students</th>
                                     <th>Active Users</th>
-                                    <th>Avg Budget</th>
+                                    <th>Engagement</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -372,154 +495,263 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination -->
+                    <div class="flex items-center justify-between mt-6">
+                        <div class="text-sm text-gray-400">
+                            Showing <span id="startIndex">1</span>-<span id="endIndex">10</span> of <span id="totalUniversities">40</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="premium-input border border-gray-700 px-4" onclick="prevPage()">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="premium-input border border-gray-700 px-4" onclick="nextPage()">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Meal Database -->
+                <!-- Meal Database Enhanced -->
                 <div class="premium-card">
-                    <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
-                        <i class="fas fa-utensils text-orange-400"></i>
-                        Meal Database
-                    </h2>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6" id="mealGrid">
-                        <!-- Meal cards will be added by JS -->
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 class="text-2xl font-bold flex items-center gap-3">
+                                <i class="fas fa-utensils text-orange-400"></i>
+                                Meal Intelligence
+                            </h2>
+                            <p class="text-gray-400 mt-1">AI-powered meal recommendations</p>
+                        </div>
+                        <button class="btn-premium" onclick="showAddMealModal()">
+                            <i class="fas fa-plus-circle"></i> Add Smart Meal
+                        </button>
                     </div>
 
-                    <button class="btn-premium w-full" onclick="showAddMealModal()">
-                        <i class="fas fa-plus-circle"></i> Add New Meal
-                    </button>
+                    <!-- Meal Categories -->
+                    <div class="flex gap-3 mb-6 overflow-x-auto pb-2">
+                        <button class="px-4 py-2 rounded-full bg-indigo-900/30 text-indigo-400 hover:bg-indigo-900/50 transition-colors" data-category="all">
+                            All Meals
+                        </button>
+                        <button class="px-4 py-2 rounded-full bg-gray-900/30 text-gray-400 hover:bg-gray-800/50 transition-colors" data-category="budget">
+                            Budget
+                        </button>
+                        <button class="px-4 py-2 rounded-full bg-gray-900/30 text-gray-400 hover:bg-gray-800/50 transition-colors" data-category="premium">
+                            Premium
+                        </button>
+                        <button class="px-4 py-2 rounded-full bg-gray-900/30 text-gray-400 hover:bg-gray-800/50 transition-colors" data-category="vegan">
+                            Vegan
+                        </button>
+                        <button class="px-4 py-2 rounded-full bg-gray-900/30 text-gray-400 hover:bg-gray-800/50 transition-colors" data-category="quick">
+                            Quick
+                        </button>
+                    </div>
+
+                    <!-- Meal Cards Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="mealGrid">
+                        <!-- Filled by JavaScript -->
+                    </div>
                 </div>
             </div>
 
-            <!-- Right: AI Controls & Analytics -->
+            <!-- Right Column -->
             <div class="space-y-8">
-                <!-- AI Controls -->
+                <!-- AI Training Panel -->
                 <div class="premium-card">
                     <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                        <i class="fas fa-brain text-purple-400"></i>
-                        AI Controls
+                        <i class="fas fa-brain text-purple-400 animate-pulse"></i>
+                        AI Training Suite
                     </h2>
 
                     <div class="space-y-6">
-                        <div class="flex items-center justify-between p-4 rounded-xl bg-gray-900/50">
-                            <div>
-                                <p class="font-medium">Auto-learning Mode</p>
-                                <p class="text-sm text-gray-400">AI learns from user patterns</p>
+                        <!-- Current Training -->
+                        <div class="p-4 rounded-xl bg-gradient-to-r from-purple-900/30 to-indigo-900/30 border border-purple-500/20">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Nutrition Model v3.5</span>
+                                <span class="text-sm text-purple-400">68%</span>
                             </div>
-                            <label class="switch">
-                                <input type="checkbox" checked id="autoLearn">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-
-                        <div class="flex items-center justify-between p-4 rounded-xl bg-gray-900/50">
-                            <div>
-                                <p class="font-medium">Price Prediction AI</p>
-                                <p class="text-sm text-gray-400">Predict market prices</p>
+                            <div class="training-progress">
+                                <div class="training-progress-bar" style="width: 68%"></div>
                             </div>
-                            <label class="switch">
-                                <input type="checkbox" checked id="priceAI">
-                                <span class="slider"></span>
-                            </label>
+                            <p class="text-xs text-gray-400 mt-2">Training on 42K meal patterns</p>
                         </div>
 
-                        <div class="flex items-center justify-between p-4 rounded-xl bg-gray-900/50">
-                            <div>
-                                <p class="font-medium">Nutritional Analysis</p>
-                                <p class="text-sm text-gray-400">Analyze meal nutrition</p>
+                        <!-- Training Controls -->
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 rounded-xl bg-gray-900/50">
+                                <div>
+                                    <p class="font-medium">Auto-learning</p>
+                                    <p class="text-sm text-gray-400">Continuous learning</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
                             </div>
-                            <label class="switch">
-                                <input type="checkbox" checked id="nutritionAI">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
 
-                        <div class="pt-4 border-t border-gray-800">
-                            <label class="block mb-3 font-medium">AI Creativity Level</label>
-                            <input type="range" min="1" max="10" value="7" class="w-full h-2 bg-gray-700 rounded-lg" id="aiCreativity">
-                        </div>
+                            <div class="flex items-center justify-between p-4 rounded-xl bg-gray-900/50">
+                                <div>
+                                    <p class="font-medium">Price Prediction</p>
+                                    <p class="text-sm text-gray-400">Market trends AI</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
 
-                        <button class="btn-premium w-full" onclick="trainAI()">
-                            <i class="fas fa-play-circle"></i> Train AI Model
-                        </button>
+                            <div class="flex items-center justify-between p-4 rounded-xl bg-gray-900/50">
+                                <div>
+                                    <p class="font-medium">Nutrition Analysis</p>
+                                    <p class="text-sm text-gray-400">Real-time scanning</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="pt-4 border-t border-gray-800">
+                                <div class="flex justify-between mb-2">
+                                    <label class="font-medium">AI Creativity</label>
+                                    <span class="text-sm text-gray-400" id="creativityValue">Level 7</span>
+                                </div>
+                                <input type="range" min="1" max="10" value="7" class="w-full h-2 bg-gray-700 rounded-lg" id="creativitySlider">
+                            </div>
+
+                            <button class="btn-premium w-full mt-4" onclick="trainAdvancedAI()">
+                                <i class="fas fa-play-circle"></i> Train Advanced Model
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Real-time Analytics -->
+                <!-- Real-time Analytics Enhanced -->
                 <div class="premium-card">
                     <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
                         <i class="fas fa-chart-line text-green-400"></i>
-                        Real-time Analytics
+                        Live Analytics
                     </h2>
 
                     <div class="space-y-6">
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <span class="text-sm">Most Active Campus</span>
-                                <span class="text-sm font-bold">UoN (847 users)</span>
+                        <!-- Active Users Chart -->
+                        <div class="chart-container">
+                            <div class="flex justify-between mb-4">
+                                <h4 class="font-bold">Active Users</h4>
+                                <span class="text-sm text-green-400">+12% today</span>
                             </div>
-                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
-                                <div class="h-full bg-gradient-to-r from-blue-500 to-purple-500" style="width: 85%"></div>
+                            <div id="activeUsersChart" style="height: 150px;"></div>
+                        </div>
+
+                        <!-- Platform Health -->
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm">API Response Time</span>
+                                    <span class="text-sm font-bold text-emerald-400">142ms</span>
+                                </div>
+                                <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-emerald-500 to-green-500" style="width: 85%"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm">Server Uptime</span>
+                                    <span class="text-sm font-bold text-blue-400">99.97%</span>
+                                </div>
+                                <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-blue-500 to-cyan-500" style="width: 99%"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm">Database Performance</span>
+                                    <span class="text-sm font-bold text-amber-400">92.4%</span>
+                                </div>
+                                <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-amber-500 to-orange-500" style="width: 92%"></div>
+                                </div>
                             </div>
                         </div>
 
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <span class="text-sm">Most Requested Meal</span>
-                                <span class="text-sm font-bold">Githeri Special</span>
-                            </div>
-                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
-                                <div class="h-full bg-gradient-to-r from-green-500 to-emerald-500" style="width: 72%"></div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <span class="text-sm">Average Student Budget</span>
-                                <span class="text-sm font-bold">Ksh 240/day</span>
-                            </div>
-                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
-                                <div class="h-full bg-gradient-to-r from-amber-500 to-orange-500" style="width: 60%"></div>
-                            </div>
-                        </div>
-
+                        <!-- Trending Keywords -->
                         <div class="pt-4 border-t border-gray-800">
-                            <h4 class="font-bold mb-3">Trending Keywords</h4>
+                            <h4 class="font-bold mb-3">Real-time Trends</h4>
                             <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 rounded-full bg-blue-900/30 text-blue-400 text-sm">budget</span>
-                                <span class="px-3 py-1 rounded-full bg-green-900/30 text-green-400 text-sm">quick</span>
-                                <span class="px-3 py-1 rounded-full bg-purple-900/30 text-purple-400 text-sm">healthy</span>
-                                <span class="px-3 py-1 rounded-full bg-amber-900/30 text-amber-400 text-sm">cheap</span>
-                                <span class="px-3 py-1 rounded-full bg-pink-900/30 text-pink-400 text-sm">easy</span>
+                                <span class="px-3 py-1 rounded-full bg-blue-900/30 text-blue-400 text-sm">
+                                    <i class="fas fa-trend-up mr-1"></i>budget
+                                </span>
+                                <span class="px-3 py-1 rounded-full bg-green-900/30 text-green-400 text-sm">
+                                    <i class="fas fa-trend-up mr-1"></i>healthy
+                                </span>
+                                <span class="px-3 py-1 rounded-full bg-purple-900/30 text-purple-400 text-sm">
+                                    <i class="fas fa-fire mr-1"></i>quick
+                                </span>
+                                <span class="px-3 py-1 rounded-full bg-amber-900/30 text-amber-400 text-sm">
+                                    <i class="fas fa-star mr-1"></i>premium
+                                </span>
+                                <span class="px-3 py-1 rounded-full bg-pink-900/30 text-pink-400 text-sm">
+                                    <i class="fas fa-heart mr-1"></i>vegan
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
+                <!-- System Actions -->
                 <div class="premium-card">
                     <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
                         <i class="fas fa-bolt text-yellow-400"></i>
-                        Quick Actions
+                        System Actions
                     </h2>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <button class="p-4 rounded-xl bg-gray-900/50 hover:bg-gray-800/50 transition-colors text-center" onclick="exportData()">
-                            <i class="fas fa-download text-2xl mb-2 text-blue-400"></i>
-                            <p class="text-sm font-medium">Export Data</p>
+                        <button class="action-card" onclick="backupSystem()">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-3 mx-auto">
+                                <i class="fas fa-database text-white"></i>
+                            </div>
+                            <p class="text-sm font-medium text-center">Backup</p>
+                            <p class="text-xs text-gray-400 text-center">Daily backup</p>
                         </button>
-                        <button class="p-4 rounded-xl bg-gray-900/50 hover:bg-gray-800/50 transition-colors text-center" onclick="updatePrices()">
-                            <i class="fas fa-sync text-2xl mb-2 text-green-400"></i>
-                            <p class="text-sm font-medium">Update Prices</p>
+                        
+                        <button class="action-card" onclick="updatePrices()">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mb-3 mx-auto">
+                                <i class="fas fa-sync text-white"></i>
+                            </div>
+                            <p class="text-sm font-medium text-center">Sync Prices</p>
+                            <p class="text-xs text-gray-400 text-center">Live update</p>
                         </button>
-                        <button class="p-4 rounded-xl bg-gray-900/50 hover:bg-gray-800/50 transition-colors text-center" onclick="manageUsers()">
-                            <i class="fas fa-users-cog text-2xl mb-2 text-purple-400"></i>
-                            <p class="text-sm font-medium">Manage Users</p>
+                        
+                        <button class="action-card" onclick="optimizeAI()">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-3 mx-auto">
+                                <i class="fas fa-magic text-white"></i>
+                            </div>
+                            <p class="text-sm font-medium text-center">Optimize AI</p>
+                            <p class="text-xs text-gray-400 text-center">Performance</p>
                         </button>
-                        <button class="p-4 rounded-xl bg-gray-900/50 hover:bg-gray-800/50 transition-colors text-center" onclick="systemSettings()">
-                            <i class="fas fa-cogs text-2xl mb-2 text-amber-400"></i>
-                            <p class="text-sm font-medium">Settings</p>
+                        
+                        <button class="action-card" onclick="systemDiagnostics()">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mb-3 mx-auto">
+                                <i class="fas fa-stethoscope text-white"></i>
+                            </div>
+                            <p class="text-sm font-medium text-center">Diagnostics</p>
+                            <p class="text-xs text-gray-400 text-center">System health</p>
                         </button>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="mt-6 pt-6 border-t border-gray-800">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold gradient-text">24/7</div>
+                                <div class="text-xs text-gray-400">Uptime</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold gradient-text">0.01%</div>
+                                <div class="text-xs text-gray-400">Error Rate</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -528,41 +760,130 @@
 
     <!-- Footer -->
     <footer class="mt-12 pt-8 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-gray-500">© 2024 NourishAI Admin Dashboard</p>
-            <p class="text-sm text-gray-600 mt-2">Contact: 0778796999 • anyumbasidol@gmail.com</p>
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-emerald-500 flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">NourishAI Enterprise</h3>
+                            <p class="text-sm text-gray-400">Secure Admin Platform</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm">
+                        © 2024 NourishAI Pro Admin • v3.0.1 • Last updated: Today 14:30
+                    </p>
+                </div>
+                <div class="flex gap-6">
+                    <button class="text-gray-400 hover:text-white transition-colors" onclick="showSystemLogs()">
+                        <i class="fas fa-terminal text-xl"></i>
+                    </button>
+                    <button class="text-gray-400 hover:text-white transition-colors" onclick="showAPIKeys()">
+                        <i class="fas fa-key text-xl"></i>
+                    </button>
+                    <button class="text-gray-400 hover:text-white transition-colors" onclick="showDocumentation()">
+                        <i class="fas fa-book text-xl"></i>
+                    </button>
+                    <button class="text-gray-400 hover:text-white transition-colors" onclick="showSupport()">
+                        <i class="fas fa-headset text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-800 text-center text-sm text-gray-500">
+                <p>Contact: 0778796999 • anyumbasidol@gmail.com • Response Time: < 5min</p>
+                <p class="mt-2">System Status: <span class="text-green-400">● All Systems Operational</span></p>
+            </div>
         </div>
     </footer>
 
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.js"></script>
+    
     <!-- JavaScript -->
     <script>
-        // Kenyan Universities Database
+        // Enhanced Kenyan Universities Database
         const universities = [
-            { id: 1, name: 'University of Nairobi', students: 70000, activeUsers: 847, avgBudget: 280, status: 'active' },
-            { id: 2, name: 'Kenyatta University', students: 45000, activeUsers: 621, avgBudget: 250, status: 'active' },
-            { id: 3, name: 'Moi University', students: 35000, activeUsers: 432, avgBudget: 220, status: 'active' },
-            { id: 4, name: 'JKUAT', students: 28000, activeUsers: 389, avgBudget: 240, status: 'active' },
-            { id: 5, name: 'Egerton University', students: 32000, activeUsers: 345, avgBudget: 210, status: 'warning' },
-            { id: 6, name: 'Maseno University', students: 25000, activeUsers: 298, avgBudget: 200, status: 'active' },
-            { id: 7, name: 'Masinde Muliro University', students: 22000, activeUsers: 267, avgBudget: 190, status: 'active' },
-            { id: 8, name: 'Mount Kenya University', students: 35000, activeUsers: 412, avgBudget: 230, status: 'active' },
-            { id: 9, name: 'Strathmore University', students: 6000, activeUsers: 189, avgBudget: 350, status: 'active' },
-            { id: 10, name: 'USIU-Africa', students: 8000, activeUsers: 234, avgBudget: 320, status: 'active' }
+            { id: 1, name: 'University of Nairobi', students: 70000, activeUsers: 847, engagement: '92%', status: 'active', region: 'nairobi', tier: 'premium' },
+            { id: 2, name: 'Kenyatta University', students: 45000, activeUsers: 621, engagement: '88%', status: 'active', region: 'nairobi', tier: 'premium' },
+            { id: 3, name: 'Moi University', students: 35000, activeUsers: 432, engagement: '85%', status: 'active', region: 'riftvalley', tier: 'standard' },
+            { id: 4, name: 'JKUAT', students: 28000, activeUsers: 389, engagement: '87%', status: 'active', region: 'central', tier: 'standard' },
+            { id: 5, name: 'Egerton University', students: 32000, activeUsers: 345, engagement: '72%', status: 'warning', region: 'riftvalley', tier: 'standard' },
+            { id: 6, name: 'Maseno University', students: 25000, activeUsers: 298, engagement: '83%', status: 'active', region: 'nyanza', tier: 'standard' },
+            { id: 7, name: 'Masinde Muliro University', students: 22000, activeUsers: 267, engagement: '81%', status: 'active', region: 'western', tier: 'basic' },
+            { id: 8, name: 'Mount Kenya University', students: 35000, activeUsers: 412, engagement: '89%', status: 'active', region: 'central', tier: 'premium' },
+            { id: 9, name: 'Strathmore University', students: 6000, activeUsers: 189, engagement: '94%', status: 'active', region: 'nairobi', tier: 'premium' },
+            { id: 10, name: 'USIU-Africa', students: 8000, activeUsers: 234, engagement: '91%', status: 'active', region: 'nairobi', tier: 'premium' }
         ];
 
-        // Meal Database
+        // Enhanced Meal Database
         const meals = [
-            { id: 1, name: 'Githeri Special', price: 80, category: 'budget', popularity: 2847 },
-            { id: 2, name: 'Smart Rice Bowl', price: 120, category: 'standard', popularity: 1924 },
-            { id: 3, name: 'Campus Pasta', price: 150, category: 'quick', popularity: 1567 },
-            { id: 4, name: 'Protein Power Ugali', price: 110, category: 'healthy', popularity: 1342 },
-            { id: 5, name: 'Chicken Stew Feast', price: 200, category: 'premium', popularity: 987 },
-            { id: 6, name: 'Vegetable Stir-fry', price: 90, category: 'vegan', popularity: 1123 }
+            { id: 1, name: 'Githeri Power Bowl', price: 80, category: 'budget', popularity: 2847, nutrition: '8.2', cookTime: 15, difficulty: 'easy' },
+            { id: 2, name: 'Smart Rice Bowl', price: 120, category: 'standard', popularity: 1924, nutrition: '8.5', cookTime: 20, difficulty: 'easy' },
+            { id: 3, name: 'Campus Pasta Deluxe', price: 150, category: 'quick', popularity: 1567, nutrition: '7.8', cookTime: 15, difficulty: 'easy' },
+            { id: 4, name: 'Protein Power Ugali', price: 110, category: 'healthy', popularity: 1342, nutrition: '9.1', cookTime: 25, difficulty: 'medium' },
+            { id: 5, name: 'Chicken Stew Feast', price: 200, category: 'premium', popularity: 987, nutrition: '9.3', cookTime: 30, difficulty: 'medium' },
+            { id: 6, name: 'Vegetable Stir-fry', price: 90, category: 'vegan', popularity: 1123, nutrition: '8.7', cookTime: 20, difficulty: 'easy' }
         ];
 
-        // Initialize Admin Dashboard
-        class AdminDashboard {
+        // Notification System
+        class NotificationSystem {
             constructor() {
+                this.container = document.getElementById('notificationContainer');
+                this.notifications = [];
+            }
+
+            show(message, type = 'info', duration = 5000) {
+                const id = Date.now();
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.id = `notification-${id}`;
+                
+                let icon = 'info-circle';
+                if (type === 'success') icon = 'check-circle';
+                if (type === 'warning') icon = 'exclamation-triangle';
+                if (type === 'error') icon = 'times-circle';
+                
+                notification.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-${icon} text-${type === 'success' ? 'green' : type === 'warning' ? 'amber' : type === 'error' ? 'red' : 'blue'}-400 mt-1"></i>
+                        <div class="flex-1">
+                            <p class="font-medium">${message}</p>
+                            <p class="text-xs text-gray-400 mt-1">Just now</p>
+                        </div>
+                        <button onclick="window.notificationSystem.dismiss(${id})" class="text-gray-400 hover:text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                this.container.appendChild(notification);
+                this.notifications.push({ id, element: notification });
+                
+                if (duration > 0) {
+                    setTimeout(() => this.dismiss(id), duration);
+                }
+                
+                return id;
+            }
+
+            dismiss(id) {
+                const notification = document.getElementById(`notification-${id}`);
+                if (notification) {
+                    notification.style.animation = 'slideInRight 0.3s ease reverse';
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }
+        }
+
+        // Enhanced Admin Dashboard
+        class EnhancedAdminDashboard {
+            constructor() {
+                this.currentPage = 1;
+                this.itemsPerPage = 10;
+                this.currentMealFilter = 'all';
+                this.notificationSystem = new NotificationSystem();
                 this.init();
             }
 
@@ -570,31 +891,64 @@
                 this.loadUniversities();
                 this.loadMeals();
                 this.setupEventListeners();
+                this.initCharts();
+                this.setupSearchAndFilter();
                 
+                // Welcome notification
+                setTimeout(() => {
+                    this.notificationSystem.show('Admin Dashboard initialized successfully', 'success');
+                }, 1000);
+
                 console.log(`
                 ╔══════════════════════════════════════════╗
-                ║     🛠️  NOURISH AI ADMIN v2.0          ║
-                ║     Control Panel Initialized           ║
-                ║     Status: FULL ACCESS                 ║
+                ║     🛠️  NOURISH AI ADMIN PRO v3.0       ║
+                ║     ENTERPRISE CONTROL PANEL            ║
+                ║     Status: FULL ACCESS • REAL-TIME     ║
                 ╚══════════════════════════════════════════╝
+                
+                Features loaded:
+                ✓ Real-time Analytics Dashboard
+                ✓ Advanced Notification System
+                ✓ Interactive Charts & Graphs
+                ✓ Enhanced Search & Filter
+                ✓ Professional Modals
+                ✓ System Health Monitoring
+                
+                Contact: anyumbasidol@gmail.com
+                Phone: 0778796999
                 `);
             }
 
             loadUniversities() {
                 const table = document.getElementById('universityTable');
+                const start = (this.currentPage - 1) * this.itemsPerPage;
+                const end = start + this.itemsPerPage;
+                const filtered = this.filterUniversities();
+                
                 table.innerHTML = '';
-
-                universities.forEach(uni => {
+                
+                filtered.slice(start, end).forEach(uni => {
                     const row = document.createElement('tr');
                     
                     let statusBadge;
                     if (uni.status === 'active') {
-                        statusBadge = `<span class="status-badge status-active"><i class="fas fa-circle text-xs"></i> Active</span>`;
+                        statusBadge = `<span class="status-badge status-active">
+                            <i class="fas fa-circle text-xs"></i> Active
+                        </span>`;
                     } else if (uni.status === 'warning') {
-                        statusBadge = `<span class="status-badge status-warning"><i class="fas fa-exclamation-triangle text-xs"></i> Needs Update</span>`;
+                        statusBadge = `<span class="status-badge status-warning">
+                            <i class="fas fa-exclamation-triangle text-xs"></i> Needs Update
+                        </span>`;
                     } else {
-                        statusBadge = `<span class="status-badge status-inactive"><i class="fas fa-circle text-xs"></i> Inactive</span>`;
+                        statusBadge = `<span class="status-badge status-inactive">
+                            <i class="fas fa-circle text-xs"></i> Inactive
+                        </span>`;
                     }
+                    
+                    // Engagement indicator
+                    let engagementColor = 'text-emerald-400';
+                    if (parseInt(uni.engagement) < 80) engagementColor = 'text-amber-400';
+                    if (parseInt(uni.engagement) < 70) engagementColor = 'text-red-400';
 
                     row.innerHTML = `
                         <td>
@@ -602,20 +956,31 @@
                                 <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                                     <i class="fas fa-university text-white"></i>
                                 </div>
-                                <span>${uni.name}</span>
+                                <div>
+                                    <span class="font-medium">${uni.name}</span>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span class="text-xs px-2 py-1 rounded-full ${uni.tier === 'premium' ? 'bg-purple-900/30 text-purple-400' : uni.tier === 'standard' ? 'bg-blue-900/30 text-blue-400' : 'bg-gray-900/30 text-gray-400'}">
+                                            ${uni.tier}
+                                        </span>
+                                        <span class="text-xs text-gray-500">${uni.region}</span>
+                                    </div>
+                                </div>
                             </div>
                         </td>
                         <td>${uni.students.toLocaleString()}</td>
                         <td>${uni.activeUsers}</td>
-                        <td>Ksh ${uni.avgBudget}/day</td>
+                        <td><span class="${engagementColor} font-medium">${uni.engagement}</span></td>
                         <td>${statusBadge}</td>
                         <td>
                             <div class="flex gap-2">
-                                <button class="action-btn edit-btn" onclick="editUniversity(${uni.id})">
+                                <button class="action-btn edit-btn" onclick="editUniversity(${uni.id})" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="action-btn delete-btn" onclick="deleteUniversity(${uni.id})">
+                                <button class="action-btn delete-btn" onclick="deleteUniversity(${uni.id})" title="Delete">
                                     <i class="fas fa-trash"></i>
+                                </button>
+                                <button class="action-btn" style="background: rgba(139, 92, 246, 0.2); color: #8b5cf6;" onclick="viewAnalytics(${uni.id})" title="Analytics">
+                                    <i class="fas fa-chart-bar"></i>
                                 </button>
                             </div>
                         </td>
@@ -623,34 +988,75 @@
                     
                     table.appendChild(row);
                 });
+                
+                // Update pagination info
+                document.getElementById('startIndex').textContent = start + 1;
+                document.getElementById('endIndex').textContent = Math.min(end, filtered.length);
+                document.getElementById('totalUniversities').textContent = filtered.length;
+            }
+
+            filterUniversities() {
+                const searchTerm = document.getElementById('universitySearch').value.toLowerCase();
+                const statusFilter = document.getElementById('statusFilter').value;
+                
+                return universities.filter(uni => {
+                    const matchesSearch = uni.name.toLowerCase().includes(searchTerm);
+                    const matchesStatus = statusFilter === 'all' || uni.status === statusFilter;
+                    return matchesSearch && matchesStatus;
+                });
             }
 
             loadMeals() {
                 const container = document.getElementById('mealGrid');
+                const filtered = this.currentMealFilter === 'all' 
+                    ? meals 
+                    : meals.filter(meal => meal.category === this.currentMealFilter);
+                
                 container.innerHTML = '';
-
-                meals.forEach(meal => {
+                
+                filtered.forEach(meal => {
                     const card = document.createElement('div');
-                    card.className = 'premium-card border border-gray-700 hover:border-indigo-500 transition-colors';
+                    card.className = 'premium-card border border-gray-700 hover:border-indigo-500 transition-all';
                     card.innerHTML = `
                         <div class="flex justify-between items-start mb-4">
                             <div>
-                                <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-indigo-900/30 text-indigo-400 mb-2">
+                                <span class="inline-block px-3 py-1 rounded-full text-xs font-medium ${this.getCategoryColor(meal.category)} mb-2">
                                     ${meal.category.toUpperCase()}
                                 </span>
-                                <h4 class="font-bold">${meal.name}</h4>
+                                <h4 class="font-bold text-lg">${meal.name}</h4>
                             </div>
                             <div class="text-right">
                                 <div class="text-xl font-bold gradient-text">Ksh ${meal.price}</div>
+                                <div class="text-xs text-gray-400">${meal.popularity.toLocaleString()} uses</div>
                             </div>
                         </div>
-                        <p class="text-sm text-gray-400 mb-4">Used ${meal.popularity.toLocaleString()} times</p>
-                        <div class="flex justify-between">
-                            <button class="action-btn edit-btn" onclick="editMeal(${meal.id})">
-                                <i class="fas fa-edit"></i> Edit
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-400">🥗 Nutrition</span>
+                                <span class="font-medium">${meal.nutrition}/10</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-400">⏱️ Cook Time</span>
+                                <span class="font-medium">${meal.cookTime} mins</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-400">🔥 Difficulty</span>
+                                <span class="font-medium ${meal.difficulty === 'easy' ? 'text-emerald-400' : meal.difficulty === 'medium' ? 'text-amber-400' : 'text-red-400'}">
+                                    ${meal.difficulty.charAt(0).toUpperCase() + meal.difficulty.slice(1)}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button class="action-btn edit-btn flex-1" onclick="editMeal(${meal.id})">
+                                <i class="fas fa-edit mr-2"></i> Edit
                             </button>
                             <button class="action-btn delete-btn" onclick="deleteMeal(${meal.id})">
                                 <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="action-btn" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;" onclick="previewMeal(${meal.id})">
+                                <i class="fas fa-eye"></i>
                             </button>
                         </div>
                     `;
@@ -659,170 +1065,620 @@
                 });
             }
 
+            getCategoryColor(category) {
+                const colors = {
+                    budget: 'bg-emerald-900/30 text-emerald-400',
+                    standard: 'bg-blue-900/30 text-blue-400',
+                    premium: 'bg-purple-900/30 text-purple-400',
+                    vegan: 'bg-green-900/30 text-green-400',
+                    healthy: 'bg-cyan-900/30 text-cyan-400',
+                    quick: 'bg-amber-900/30 text-amber-400'
+                };
+                return colors[category] || 'bg-gray-900/30 text-gray-400';
+            }
+
+            initCharts() {
+                // Growth Chart
+                const growthChart = new ApexCharts(document.querySelector("#growthChart"), {
+                    series: [{
+                        name: 'Active Users',
+                        data: [300, 450, 600, 750, 900, 1100, 1300, 1500, 1800, 2100, 2400, 2847]
+                    }],
+                    chart: {
+                        type: 'area',
+                        height: 300,
+                        background: 'transparent',
+                        foreColor: '#94a3b8',
+                        toolbar: {
+                            show: false
+                        }
+                    },
+                    colors: ['#10b981'],
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        curve: 'smooth',
+                        width: 3
+                    },
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            shadeIntensity: 1,
+                            opacityFrom: 0.7,
+                            opacityTo: 0.1,
+                            stops: [0, 90, 100]
+                        }
+                    },
+                    xaxis: {
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    },
+                    tooltip: {
+                        theme: 'dark'
+                    }
+                });
+                growthChart.render();
+
+                // Revenue Chart
+                const revenueChart = new ApexCharts(document.querySelector("#revenueChart"), {
+                    series: [{
+                        name: 'Revenue',
+                        data: [12000, 19000, 15000, 25000, 22000, 30000, 28000, 35000, 32000, 40000, 45000, 84250]
+                    }],
+                    chart: {
+                        type: 'bar',
+                        height: 300,
+                        background: 'transparent',
+                        foreColor: '#94a3b8'
+                    },
+                    colors: ['#6366f1'],
+                    plotOptions: {
+                        bar: {
+                            borderRadius: 8,
+                            columnWidth: '60%'
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    xaxis: {
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    }
+                });
+                revenueChart.render();
+
+                // Active Users Mini Chart
+                const activeUsersChart = new ApexCharts(document.querySelector("#activeUsersChart"), {
+                    series: [{
+                        name: 'Users',
+                        data: [847, 812, 856, 798, 832, 889, 901, 847]
+                    }],
+                    chart: {
+                        type: 'line',
+                        height: 150,
+                        sparkline: {
+                            enabled: true
+                        },
+                        background: 'transparent'
+                    },
+                    stroke: {
+                        curve: 'smooth',
+                        width: 3
+                    },
+                    colors: ['#10b981'],
+                    tooltip: {
+                        theme: 'dark',
+                        fixed: {
+                            enabled: false
+                        },
+                        x: {
+                            show: false
+                        }
+                    }
+                });
+                activeUsersChart.render();
+            }
+
             setupEventListeners() {
-                // Switch toggles
-                document.getElementById('autoLearn').addEventListener('change', function() {
-                    console.log(`Auto-learning: ${this.checked ? 'Enabled' : 'Disabled'}`);
-                });
-                
-                document.getElementById('priceAI').addEventListener('change', function() {
-                    console.log(`Price Prediction: ${this.checked ? 'Enabled' : 'Disabled'}`);
-                });
-                
-                document.getElementById('nutritionAI').addEventListener('change', function() {
-                    console.log(`Nutrition Analysis: ${this.checked ? 'Enabled' : 'Disabled'}`);
+                // Theme toggle
+                document.getElementById('themeToggle').addEventListener('click', () => {
+                    const toggle = document.getElementById('themeToggle');
+                    toggle.classList.toggle('active');
+                    this.toggleTheme();
                 });
 
-                // Range slider
-                const slider = document.getElementById('aiCreativity');
-                slider.addEventListener('input', function() {
-                    console.log(`AI Creativity: Level ${this.value}/10`);
+                // Notification bell
+                document.getElementById('notificationBell').addEventListener('click', () => {
+                    this.showNotificationsPanel();
                 });
+
+                // Creativity slider
+                document.getElementById('creativitySlider').addEventListener('input', (e) => {
+                    document.getElementById('creativityValue').textContent = `Level ${e.target.value}`;
+                });
+
+                // Meal category filters
+                document.querySelectorAll('[data-category]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        // Update active button
+                        document.querySelectorAll('[data-category]').forEach(b => {
+                            b.className = 'px-4 py-2 rounded-full bg-gray-900/30 text-gray-400 hover:bg-gray-800/50 transition-colors';
+                        });
+                        btn.className = 'px-4 py-2 rounded-full bg-indigo-900/30 text-indigo-400 hover:bg-indigo-900/50 transition-colors';
+                        
+                        // Filter meals
+                        this.currentMealFilter = btn.dataset.category;
+                        this.loadMeals();
+                    });
+                });
+
+                // Action cards
+                document.querySelectorAll('.action-card').forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        card.style.transform = 'translateY(-5px)';
+                    });
+                    card.addEventListener('mouseleave', () => {
+                        card.style.transform = 'translateY(0)';
+                    });
+                });
+            }
+
+            setupSearchAndFilter() {
+                // University search
+                document.getElementById('universitySearch').addEventListener('input', () => {
+                    this.currentPage = 1;
+                    this.loadUniversities();
+                });
+
+                // Status filter
+                document.getElementById('statusFilter').addEventListener('change', () => {
+                    this.currentPage = 1;
+                    this.loadUniversities();
+                });
+            }
+
+            toggleTheme() {
+                document.body.classList.toggle('light-mode');
+                this.notificationSystem.show('Theme updated', 'info');
+            }
+
+            showNotificationsPanel() {
+                this.showModal('Notifications', `
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 rounded-xl bg-gray-900/50">
+                            <div>
+                                <p class="font-medium">System Update Available</p>
+                                <p class="text-sm text-gray-400">Version 3.0.2 ready</p>
+                            </div>
+                            <button class="btn-premium text-sm" onclick="installUpdate()">
+                                Install
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 rounded-xl bg-gray-900/50">
+                            <div>
+                                <p class="font-medium">New User Signups</p>
+                                <p class="text-sm text-gray-400">47 new students today</p>
+                            </div>
+                            <button class="premium-input border border-gray-700 text-sm" onclick="viewUsers()">
+                                View
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 rounded-xl bg-gray-900/50">
+                            <div>
+                                <p class="font-medium">Price Alert</p>
+                                <p class="text-sm text-gray-400">Tomatoes 40% cheaper</p>
+                            </div>
+                            <button class="premium-input border border-gray-700 text-sm" onclick="updateMarket()">
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 pt-6 border-t border-gray-800">
+                        <button class="w-full premium-input border border-gray-700" onclick="markAllAsRead()">
+                            <i class="fas fa-check mr-2"></i> Mark all as read
+                        </button>
+                    </div>
+                `);
+            }
+
+            showModal(title, content) {
+                const modal = document.createElement('div');
+                modal.className = 'modal-overlay';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <div class="flex items-center justify-between mb-8">
+                            <h3 class="text-2xl font-bold">${title}</h3>
+                            <button onclick="closeModal()" class="text-gray-400 hover:text-white">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                        </div>
+                        ${content}
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
             }
         }
 
-        // Modal Functions
-        function showAddUniversityModal() {
-            const modal = document.createElement('div');
-            modal.className = 'modal-overlay';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h3 class="text-2xl font-bold mb-6">Add New University</h3>
-                    <div class="space-y-4">
-                        <input type="text" placeholder="University Name" class="premium-input" id="uniName">
-                        <input type="number" placeholder="Total Students" class="premium-input" id="uniStudents">
-                        <input type="number" placeholder="Average Daily Budget (Ksh)" class="premium-input" id="uniBudget">
-                        <div class="flex gap-4">
-                            <button class="btn-premium flex-1" onclick="addUniversity()">
-                                Add University
-                            </button>
-                            <button class="premium-input border border-gray-700 flex-1" onclick="closeModal()">
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-        }
-
-        function showAddMealModal() {
-            const modal = document.createElement('div');
-            modal.className = 'modal-overlay';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h3 class="text-2xl font-bold mb-6">Add New Meal</h3>
-                    <div class="space-y-4">
-                        <input type="text" placeholder="Meal Name" class="premium-input" id="mealName">
-                        <input type="number" placeholder="Price (Ksh)" class="premium-input" id="mealPrice">
-                        <select class="premium-input" id="mealCategory">
-                            <option value="budget">Budget Meal</option>
-                            <option value="standard">Standard Meal</option>
-                            <option value="premium">Premium Meal</option>
-                            <option value="vegan">Vegan Meal</option>
-                            <option value="quick">Quick Meal</option>
-                        </select>
-                        <div class="flex gap-4">
-                            <button class="btn-premium flex-1" onclick="addMeal()">
-                                Add Meal
-                            </button>
-                            <button class="premium-input border border-gray-700 flex-1" onclick="closeModal()">
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-        }
-
+        // Global functions
         function closeModal() {
             const modal = document.querySelector('.modal-overlay');
             if (modal) modal.remove();
         }
 
-        // Action Functions
+        function showAddUniversityModal() {
+            window.adminDashboard.showModal('Add University', `
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-3">University Details</label>
+                        <input type="text" placeholder="University Name" class="premium-input mb-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="number" placeholder="Total Students" class="premium-input">
+                            <input type="number" placeholder="Active Users" class="premium-input">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-3">Region & Tier</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <select class="premium-input">
+                                <option value="nairobi">Nairobi</option>
+                                <option value="coast">Coast</option>
+                                <option value="riftvalley">Rift Valley</option>
+                                <option value="western">Western</option>
+                                <option value="nyanza">Nyanza</option>
+                            </select>
+                            <select class="premium-input">
+                                <option value="premium">Premium</option>
+                                <option value="standard">Standard</option>
+                                <option value="basic">Basic</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 pt-4">
+                        <button class="btn-premium flex-1" onclick="addUniversity()">
+                            <i class="fas fa-plus mr-2"></i> Add University
+                        </button>
+                        <button class="premium-input border border-gray-700 flex-1" onclick="closeModal()">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            `);
+        }
+
+        function showAddMealModal() {
+            window.adminDashboard.showModal('Add Smart Meal', `
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-3">Meal Information</label>
+                        <input type="text" placeholder="Meal Name" class="premium-input mb-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="number" placeholder="Price (Ksh)" class="premium-input">
+                            <select class="premium-input">
+                                <option value="budget">Budget</option>
+                                <option value="standard">Standard</option>
+                                <option value="premium">Premium</option>
+                                <option value="vegan">Vegan</option>
+                                <option value="healthy">Healthy</option>
+                                <option value="quick">Quick</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-3">Nutrition & Difficulty</label>
+                        <div class="grid grid-cols-3 gap-4">
+                            <input type="number" placeholder="Nutrition Score" class="premium-input" min="1" max="10" step="0.1">
+                            <input type="number" placeholder="Cook Time (mins)" class="premium-input">
+                            <select class="premium-input">
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 pt-4">
+                        <button class="btn-premium flex-1" onclick="addMeal()">
+                            <i class="fas fa-plus-circle mr-2"></i> Add Meal
+                        </button>
+                        <button class="premium-input border border-gray-700 flex-1" onclick="closeModal()">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            `);
+        }
+
         function addUniversity() {
-            const name = document.getElementById('uniName').value;
-            if (name) {
-                alert(`University "${name}" added to database!`);
-                closeModal();
-            } else {
-                alert('Please enter a university name!');
-            }
+            window.adminDashboard.notificationSystem.show('University added successfully', 'success');
+            closeModal();
         }
 
         function addMeal() {
-            const name = document.getElementById('mealName').value;
-            if (name) {
-                alert(`Meal "${name}" added to database!`);
-                closeModal();
-            } else {
-                alert('Please enter a meal name!');
-            }
+            window.adminDashboard.notificationSystem.show('Meal added to database', 'success');
+            closeModal();
         }
 
         function editUniversity(id) {
             const uni = universities.find(u => u.id === id);
-            alert(`Editing: ${uni.name}\n\nIn production, this would open an edit form.`);
+            window.adminDashboard.showModal(`Edit ${uni.name}`, `
+                <div class="space-y-6">
+                    <p class="text-gray-400">Editing university settings. Changes will affect all associated users.</p>
+                    <input type="text" value="${uni.name}" class="premium-input mb-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="number" value="${uni.students}" class="premium-input">
+                        <input type="number" value="${uni.activeUsers}" class="premium-input">
+                    </div>
+                    <div class="flex gap-4 pt-4">
+                        <button class="btn-premium flex-1" onclick="saveUniversity(${id})">
+                            <i class="fas fa-save mr-2"></i> Save Changes
+                        </button>
+                        <button class="premium-input border border-gray-700 flex-1" onclick="closeModal()">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            `);
         }
 
         function deleteUniversity(id) {
-            if (confirm('Are you sure you want to delete this university?')) {
-                alert(`University ${id} deleted from database.`);
-            }
+            window.adminDashboard.showModal('Confirm Deletion', `
+                <div class="space-y-6">
+                    <div class="p-4 rounded-xl bg-red-900/20 border border-red-500/20">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-exclamation-triangle text-red-400 text-xl"></i>
+                            <div>
+                                <p class="font-medium">Warning: This action cannot be undone</p>
+                                <p class="text-sm text-gray-400 mt-1">All university data will be permanently deleted</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-400">Are you sure you want to delete this university? This will affect all associated users and data.</p>
+                    
+                    <div class="flex gap-4">
+                        <button class="btn-premium flex-1 bg-gradient-to-r from-red-500 to-pink-500" onclick="confirmDeleteUniversity(${id})">
+                            <i class="fas fa-trash mr-2"></i> Delete Permanently
+                        </button>
+                        <button class="premium-input border border-gray-700 flex-1" onclick="closeModal()">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            `);
+        }
+
+        function confirmDeleteUniversity(id) {
+            window.adminDashboard.notificationSystem.show('University deleted successfully', 'success');
+            closeModal();
         }
 
         function editMeal(id) {
             const meal = meals.find(m => m.id === id);
-            alert(`Editing: ${meal.name}\n\nIn production, this would open an edit form.`);
+            window.adminDashboard.notificationSystem.show(`Editing: ${meal.name}`, 'info');
         }
 
         function deleteMeal(id) {
-            if (confirm('Are you sure you want to delete this meal?')) {
-                alert(`Meal ${id} deleted from database.`);
+            if (confirm('Delete this meal?')) {
+                window.adminDashboard.notificationSystem.show('Meal deleted', 'success');
             }
         }
 
-        function trainAI() {
+        function trainAdvancedAI() {
             const btn = event.target.closest('button');
             const original = btn.innerHTML;
             
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Training AI...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Training AI Model...';
             btn.disabled = true;
             
+            // Simulate training progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    btn.innerHTML = '<i class="fas fa-check"></i> Training Complete';
+                    setTimeout(() => {
+                        btn.innerHTML = original;
+                        btn.disabled = false;
+                        window.adminDashboard.notificationSystem.show('AI model successfully trained! Accuracy improved by 2.3%', 'success');
+                    }, 1500);
+                }
+            }, 300);
+        }
+
+        function exportAnalytics() {
+            window.adminDashboard.notificationSystem.show('Exporting analytics report...', 'info');
             setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-check"></i> AI Trained!';
-                setTimeout(() => {
-                    btn.innerHTML = original;
-                    btn.disabled = false;
-                    alert('AI model successfully trained with latest data!');
-                }, 1500);
+                window.adminDashboard.notificationSystem.show('Report exported successfully (PDF + CSV)', 'success');
+            }, 2000);
+        }
+
+        function refreshAnalytics() {
+            window.adminDashboard.notificationSystem.show('Refreshing analytics data...', 'info');
+            setTimeout(() => {
+                window.adminDashboard.notificationSystem.show('Analytics updated with latest data', 'success');
+            }, 1500);
+        }
+
+        function syncUniversities() {
+            window.adminDashboard.notificationSystem.show('Syncing university data...', 'info');
+            setTimeout(() => {
+                window.adminDashboard.notificationSystem.show('University data synchronized', 'success');
+            }, 2000);
+        }
+
+        function backupSystem() {
+            window.adminDashboard.notificationSystem.show('Starting system backup...', 'info');
+            setTimeout(() => {
+                window.adminDashboard.notificationSystem.show('Backup completed successfully', 'success');
             }, 3000);
         }
 
-        function exportData() {
-            alert('Exporting all data to CSV... This would download files in production.');
-        }
-
         function updatePrices() {
-            alert('Updating market prices from live APIs...');
+            window.adminDashboard.notificationSystem.show('Updating market prices from APIs...', 'info');
+            setTimeout(() => {
+                window.adminDashboard.notificationSystem.show('Prices updated across all regions', 'success');
+            }, 2500);
         }
 
-        function manageUsers() {
-            alert('Opening user management interface...');
+        function optimizeAI() {
+            window.adminDashboard.notificationSystem.show('Optimizing AI performance...', 'info');
+            setTimeout(() => {
+                window.adminDashboard.notificationSystem.show('AI optimization complete. Response time improved by 15%', 'success');
+            }, 3500);
         }
 
-        function systemSettings() {
-            alert('Opening system configuration panel...');
+        function systemDiagnostics() {
+            window.adminDashboard.showModal('System Diagnostics', `
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 rounded-xl bg-emerald-900/20 border border-emerald-500/20">
+                            <p class="text-sm text-gray-400">API Health</p>
+                            <p class="text-2xl font-bold text-emerald-400">100%</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-blue-900/20 border border-blue-500/20">
+                            <p class="text-sm text-gray-400">Database</p>
+                            <p class="text-2xl font-bold text-blue-400">99.9%</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-amber-900/20 border border-amber-500/20">
+                            <p class="text-sm text-gray-400">Server Load</p>
+                            <p class="text-2xl font-bold text-amber-400">42%</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-purple-900/20 border border-purple-500/20">
+                            <p class="text-sm text-gray-400">AI Models</p>
+                            <p class="text-2xl font-bold text-purple-400">95%</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">Storage Used</span>
+                            <span class="text-sm font-bold">4.2GB / 10GB</span>
+                        </div>
+                        <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-blue-500 to-cyan-500" style="width: 42%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4 border-t border-gray-800">
+                        <button class="w-full premium-input border border-gray-700" onclick="runFullDiagnostics()">
+                            <i class="fas fa-play mr-2"></i> Run Full Diagnostics
+                        </button>
+                    </div>
+                </div>
+            `);
+        }
+
+        function nextPage() {
+            const total = window.adminDashboard.filterUniversities().length;
+            const totalPages = Math.ceil(total / window.adminDashboard.itemsPerPage);
+            
+            if (window.adminDashboard.currentPage < totalPages) {
+                window.adminDashboard.currentPage++;
+                window.adminDashboard.loadUniversities();
+            }
+        }
+
+        function prevPage() {
+            if (window.adminDashboard.currentPage > 1) {
+                window.adminDashboard.currentPage--;
+                window.adminDashboard.loadUniversities();
+            }
         }
 
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', () => {
-            window.adminDashboard = new AdminDashboard();
+            window.adminDashboard = new EnhancedAdminDashboard();
+            window.notificationSystem = window.adminDashboard.notificationSystem;
+            
+            // Add switch styles
+            const style = document.createElement('style');
+            style.textContent = `
+                .switch {
+                    position: relative;
+                    display: inline-block;
+                    width: 60px;
+                    height: 34px;
+                }
+                
+                .switch input {
+                    opacity: 0;
+                    width: 0;
+                    height: 0;
+                }
+                
+                .slider {
+                    position: absolute;
+                    cursor: pointer;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: #374151;
+                    transition: .4s;
+                    border-radius: 34px;
+                }
+                
+                .slider:before {
+                    position: absolute;
+                    content: "";
+                    height: 26px;
+                    width: 26px;
+                    left: 4px;
+                    bottom: 4px;
+                    background-color: white;
+                    transition: .4s;
+                    border-radius: 50%;
+                }
+                
+                input:checked + .slider {
+                    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+                }
+                
+                input:checked + .slider:before {
+                    transform: translateX(26px);
+                }
+                
+                .action-card {
+                    background: rgba(30, 41, 59, 0.8);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 16px;
+                    padding: 20px;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                }
+                
+                .action-card:hover {
+                    transform: translateY(-5px);
+                    border-color: rgba(99, 102, 241, 0.4);
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+                }
+                
+                .stat-card {
+                    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+                    border: 1px solid rgba(99, 102, 241, 0.2);
+                    border-radius: 20px;
+                    padding: 20px;
+                    text-align: center;
+                }
+                
+                .gradient-text {
+                    background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                }
+            `;
+            document.head.appendChild(style);
         });
     </script>
 </body>
 </html>
+[file content end]
