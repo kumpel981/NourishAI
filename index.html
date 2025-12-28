@@ -1333,7 +1333,19 @@
             Contact: anyumbasidol@gmail.com
             Phone: 0778796999
             `);
-        });
+        });// KILL ALL ALERTS - REPLACE WITH MODALS
+window.alert = function(msg) { 
+    const modal = document.createElement('div');
+    modal.innerHTML = `<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;">
+        <div style="background:#1e293b;border-radius:20px;padding:30px;max-width:400px;border:2px solid #6366f1;">
+            <div style="font-size:20px;font-weight:bold;margin-bottom:15px;color:#f1f5f9">${msg.split('\n')[0]}</div>
+            <div style="color:#94a3b8;margin-bottom:20px;">${msg.substring(msg.indexOf('\n')+1) || ''}</div>
+            <button onclick="this.parentElement.parentElement.remove()" style="background:#6366f1;color:white;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;width:100%">OK</button>
+        </div>
+    </div>`;
+    document.body.appendChild(modal);
+};
     </script>
 </body>
 </html>
+
